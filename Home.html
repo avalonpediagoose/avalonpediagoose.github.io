@@ -21,7 +21,7 @@
     </div>
 
     <script>
-        let identities = ["梅林", "雜魚", "雜魚", "莫德雷德", "奧伯倫", "魔甘娜", "雜魚", "雜魚", "派西維爾", "刺客"];
+        let identities = ["梅林", "忠臣", "忠臣", "莫德雷德", "奧伯倫", "魔甘娜", "忠臣", "忠臣", "派西維爾", "刺客"];
         let usedIndices = new Set();
         let currentPlayer = 1;
         let assignedRoles = [];
@@ -79,6 +79,25 @@
             }
             
             document.getElementById("identityText").innerText = infoText;
+    
+            let identityImage = document.getElementById("identityImage");
+            if (playerData.role === "雜魚") {
+                identityImage.src = "images/legal_servant.png"; // 雜魚固定圖片
+            } else if (playerData.role === "梅林") {
+                identityImage.src = "images/merlin.png";
+            } else if (playerData.role === "莫德雷德") {
+                identityImage.src = "images/mordred.png";
+            } else if (playerData.role === "奧伯倫") {
+                identityImage.src = "images/oberon.png";
+            } else if (playerData.role === "魔甘娜") {
+                identityImage.src = "images/morgana.png";
+            } else if (playerData.role === "派西維爾") {
+                identityImage.src = "images/percival.png";
+            } else if (playerData.role === "刺客") {
+                identityImage.src = "images/assassin.png";
+            }
+    
+            identityImage.style.display = "block"; // 顯示圖片
             document.getElementById("identityBox").style.display = "block";
         }
         
