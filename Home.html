@@ -79,25 +79,6 @@
             }
             
             document.getElementById("identityText").innerText = infoText;
-    
-            let identityImage = document.getElementById("identityImage");
-            if (playerData.role === "雜魚") {
-                identityImage.src = "images/legal_servant.jpg"; // 雜魚固定圖片
-            } else if (playerData.role === "梅林") {
-                identityImage.src = "images/merlin.jpg";
-            } else if (playerData.role === "莫德雷德") {
-                identityImage.src = "images/mordred.jpg";
-            } else if (playerData.role === "奧伯倫") {
-                identityImage.src = "images/oberon.jpg";
-            } else if (playerData.role === "魔甘娜") {
-                identityImage.src = "images/morgana.jpg";
-            } else if (playerData.role === "派西維爾") {
-                identityImage.src = "images/percival.jpg";
-            } else if (playerData.role === "刺客") {
-                identityImage.src = "images/assassin.jpg";
-            }
-    
-            identityImage.style.display = "block"; // 顯示圖片
             document.getElementById("identityBox").style.display = "block";
         }
         
