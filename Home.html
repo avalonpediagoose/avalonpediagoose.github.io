@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>阿瓦隆身份抽取</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; }
+        #identityBox { display: none; margin-top: 20px; padding: 10px; border: 2px solid #000; }
+        button { padding: 10px 20px; font-size: 16px; margin: 5px; }
+    </style>
+</head>
+<body>
+    <h1>阿瓦隆身份抽取</h1>
+    <p>目前抽取玩家: <span id="currentPlayer">1</span>/10</p>
+    <button onclick="startNewRound()" id="newRoundButton">新一輪抽取</button>
+    <button onclick="drawIdentity()" id="drawButton" style="display: none;">抽取身份</button>
+    <div id="identityBox">
+        <p id="identityText"></p>
+        <button onclick="closeIdentity()" id="closeButton">關閉</button>
+    </div>
+
+    <script>
+        let identities = ["梅林", "雜魚", "雜魚", "莫德雷德", "奧伯倫", "魔甘娜", "雜魚", "雜魚", "派西維爾", "刺客"];
+        let usedIndices = new Set();
+        let currentPlayer = 1;
+        let assignedRoles = [];
+        
+        function shuffleRoles() {
+            assignedRoles = identities
+                .map((role) => ({ role, sort: Math.random() }))
+                .sort((a, b) => a.sort - b.sort)
+                .map((item, index) => ({ playerNum: index + 1, role: item.role }));
+        }
+        
+        function getMerlinInfo() {
+            return assignedRoles
+                .filter(p => ["刺客", "魔甘娜", "奧伯倫"].includes(p.role))
+                .map(p => p.playerNum)
+                .sort((a, b) => a - b);
+        }
+        
+        function getPercivalInfo() {
+            return assignedRoles
+                .filter(p => ["梅林", "魔甘娜"].includes(p.role))
+                .map(p => p.playerNum)
+                .sort((a, b) => a - b);
+        }
+        
+        function getRedTeamInfo(role) {
+            return assignedRoles
+                .filter(p => ["刺客", "魔甘娜", "莫德雷德"].includes(p.role) && p.role !== role)
+                .map(p => p.playerNum)
+                .sort((a, b) => a - b);
+        }
+        
+        function drawIdentity() {
+            if (usedIndices.size >= identities.length) {
+                alert("所有身份已抽取完畢！");
+                return;
+            }
+            let playerData = assignedRoles[currentPlayer - 1];
+            usedIndices.add(currentPlayer);
+            let infoText = `玩家 ${currentPlayer} 的身份是：${playerData.role}`;
+            
+            if (playerData.role === "梅林") {
+                let merlinInfo = getMerlinInfo();
+                infoText += ` [${merlinInfo.join(", ")}]`;
+            }
+            
+            if (playerData.role === "派西維爾") {
+                let percivalInfo = getPercivalInfo();
+                infoText += ` [${percivalInfo.join(", ")}]`;
+            }
+            
+            if (["刺客", "魔甘娜", "莫德雷德"].includes(playerData.role)) {
+                let redInfo = getRedTeamInfo(playerData.role);
+                infoText += ` [${redInfo.join(", ")}]`;
+            }
+            
+            document.getElementById("identityText").innerText = infoText;
+            document.getElementById("identityBox").style.display = "block";
+        }
+        
+        function closeIdentity() {
+            document.getElementById("identityBox").style.display = "none";
+            if (currentPlayer < 10) {
+                currentPlayer++;
+                document.getElementById("currentPlayer").innerText = currentPlayer;
+            } else {
+                document.getElementById("newRoundButton").style.display = "inline-block";
+                document.getElementById("drawButton").style.display = "none";
+            }
+        }
+        
+        function startNewRound() {
+            usedIndices.clear();
+            currentPlayer = 1;
+            document.getElementById("currentPlayer").innerText = currentPlayer;
+            document.getElementById("newRoundButton").style.display = "none";
+            document.getElementById("drawButton").style.display = "inline-block";
+            shuffleRoles();
+        }
+        
+        shuffleRoles();
+    </script>
+</body>
+</html>
